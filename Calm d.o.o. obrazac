@@ -413,7 +413,7 @@ pomoc_gumb.pack(padx=10, pady=10)
 email_unos.bind("<FocusOut>", lambda e: provjera_email(email_unos))
 
 
-tk.Label(glavni, text="Password (točno šezdeset i sedam znakova)").pack()
+tk.Label(glavni, text="Lozinka (točno šezdeset i sedam znakova)").pack()
 lozinka_unos=tk.Entry(glavni, show="*")
 lozinka_unos.pack()
 tk.Button(glavni, text="Provjeri", command=provjera_lozinke).pack()
