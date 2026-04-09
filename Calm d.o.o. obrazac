@@ -1,0 +1,451 @@
+import tkinter as tk
+from tkinter import messagebox
+import random
+import datetime
+
+glavni=tk.Tk()
+glavni.title("Calm d.o.o. Obrazac")
+glavni.geometry("1300x900")
+brojac_zavrsio= False
+
+#-------------------ONEMOGUĆIVANJE ZATVARANJA -------------------
+
+def onemoguci_zatvaranje():
+    pass
+
+glavni.protocol("WM_DELETE_WINDOW", onemoguci_zatvaranje)
+
+#-------------------RAGEBAITED-------------------
+
+def zatvori_sve():
+    glavni.destroy()
+
+def ragebait_gumb():
+    rage_pobjeda=tk.Toplevel(glavni)
+    rage_pobjeda.title("Kako nisi uspio?")
+    rage_pobjeda.geometry("300x300")
+    try:
+        gif=tk.PhotoImage(file="cat.gif")
+        label=tk.Label(rage_pobjeda, image=gif)
+        label.image=gif
+        label.pack(expand=True)
+    except:
+        tk.Label(rage_pobjeda, text="(GIF se nije učitao 😢)").pack(expand=True)
+    rage_pobjeda.after(5000, zatvori_sve)
+
+# ------------------- BROJAČ-------------------
+
+def brojac(brojac_unos):
+    preostalo_vrijeme=6 * 60 + 7
+
+    def update():
+        nonlocal preostalo_vrijeme
+        global brojac_zavrsio
+        if preostalo_vrijeme<=0:
+            brojac_unos.config(state="normal")
+            brojac_unos.delete(0, tk.END)
+            brojac_unos.insert(0, "Vrijeme isteklo!")
+            brojac_unos.config(bg="red")
+            for entry in svi_unosi:
+                entry.config(state="normal")
+                entry.delete(0, tk.END)
+                entry.insert(0, "I forgot.")
+                entry.config(bg="red")
+            brojac_zavrsio=True
+            return
+
+        minute=preostalo_vrijeme // 60
+        sekunde=preostalo_vrijeme % 60
+        brojac_unos.delete(0, tk.END)
+        brojac_unos.insert(0, f"{minute:02}:{sekunde:02}")
+        preostalo_vrijeme-=1
+        glavni.after(1000, update)
+    update()
+
+# -------------------BOJA POTVRDE-------------------
+
+def oznaci_netocno(unos):
+    unos.config(bg="red")
+
+def oznaci_tocno(unos):
+    unos.config(bg="lightgreen")
+
+# -------------------  KORISNIČKO IME -------------------
+
+ime_nivo=0
+
+def provjera_imena():
+    global ime_nivo
+    ime=ime_unos.get()
+    if ime_nivo==0:
+        if len(ime)>= 9:
+            ime_nivo+=1
+            oznaci_tocno(ime_unos)
+            messagebox.showinfo("Nadodajte", "Sad mora sadržavati broj.")
+        else:
+            oznaci_netocno(ime_unos)
+    elif ime_nivo==1:
+        if any(c.isdigit() for c in ime):
+            ime_nivo+=1
+            oznaci_tocno(ime_unos)
+            messagebox.showinfo("Nadodajte", "Sad mora sadržavati znak.")
+        else:
+            oznaci_netocno(ime_unos)
+    elif ime_nivo==2:
+        if any(not c.isalnum() for c in ime):
+            ime_nivo+=1
+            oznaci_tocno(ime_unos)
+            messagebox.showinfo("Nadodajte", "Sad mora imati veliko slovo.")
+        else:
+            oznaci_netocno(ime_unos)
+    elif ime_nivo==3:
+        if any(c.isupper() for c in ime):
+            ime_nivo+=1
+            oznaci_tocno(ime_unos)
+            messagebox.showinfo("Nadodajte", "Sad zbroj znamenki mora biti 25.")
+        else:
+            oznaci_netocno(ime_unos)
+    elif ime_nivo==4:
+        suma=sum(int(c) for c in ime if c.isdigit())
+        if suma==25:
+            oznaci_tocno(ime_unos)
+            messagebox.showinfo("Uspjeh!", "Korisničko ime prihvaćeno!")
+        else:
+            oznaci_netocno(ime_unos)
+
+# ------------------- DATUM ROĐENJA-------------------
+
+poc_datum=datetime.date(1967, 1, 1)
+zav_datum=datetime.date(2026, 12, 31)
+raspon=(zav_datum - poc_datum).days
+
+def update_datum(unos):
+    d=poc_datum + datetime.timedelta(days=int(unos))
+    datum_tekst.config(text=str(d))
+
+#------------------- ROD-------------------
+
+rodovi=[]
+
+rodovi.insert(1, "Genderflux")
+rodovi.insert(2, "Cavusgender")
+rodovi.insert(3, "Autigender")
+rodovi.insert(4, "Collgender")
+rodovi.insert(5, "Demiflux")
+rodovi.insert(6, "Agender")
+rodovi.insert(7, "Genderqueer")
+rodovi.insert(8, "Egogender")
+rodovi.insert(9, "Colorgender")
+rodovi.insert(10, "Cassgender")
+rodovi.insert(11, "Bigender")
+rodovi.insert(12, "Healgender")
+rodovi.insert(13, "Apconsugender")
+rodovi.insert(14, "Cloudgender")
+rodovi.insert(15, "Mirrorgender")
+rodovi.insert(16, "Ambigender")
+rodovi.insert(17, "Alexigender")
+rodovi.insert(18, "Astral gender")
+rodovi.insert(19, "Fluidflux")
+rodovi.insert(20, "Anogender")
+rodovi.insert(21, "Commogender")
+rodovi.insert(22, "Femfluid")
+rodovi.insert(23, "Cassflux")
+rodovi.insert(24, "Anxiegender")
+rodovi.insert(25, "Duragender")
+rodovi.insert(26, "Androgyne")
+rodovi.insert(27, "Axigender")
+rodovi.insert(28, "Genderflow")
+rodovi.insert(29, "Omnigender")
+rodovi.insert(30, "Muški")
+rodovi.insert(31, "Ceterogender")
+rodovi.insert(32, "Aesthetigender")
+rodovi.insert(33, "Ceterofluid")
+rodovi.insert(34, "Existigender")
+rodovi.insert(35, "Abimegender")
+rodovi.insert(36, "Boyflux")
+rodovi.insert(37, "Condigender")
+rodovi.insert(38, "Astergender")
+rodovi.insert(39, "Demigender")
+rodovi.insert(40, "Anesigender")
+rodovi.insert(41, "Amicagender")
+rodovi.insert(42, "Burstgender")
+rodovi.insert(43, "Epicene")
+rodovi.insert(44, "Blurgender")
+rodovi.insert(45, "Ženski")
+rodovi.insert(46, "Aliusgender")
+rodovi.insert(47, "Genderfuzz")
+rodovi.insert(48, "Gender witched")
+rodovi.insert(49, "Apagender")
+rodovi.insert(50, "Domgender")
+rodovi.insert(51, "Deliciagender")
+rodovi.insert(52, "Genderfluid")
+rodovi.insert(53, "Femgender")
+rodovi.insert(54, "Amaregender")
+rodovi.insert(55, "Antegender")
+rodovi.insert(56, "Agenderflux")
+rodovi.insert(57, "Anongender")
+rodovi.insert(58, "Cisgender")
+rodovi.insert(59, "Aerogender")
+rodovi.insert(60, "Biogender")
+rodovi.insert(61, "Esspigender")
+rodovi.insert(62, "Genderblank")
+rodovi.insert(63, "Cendgender")
+rodovi.insert(64, "Gemigender")
+rodovi.insert(65, "Girlflux")
+rodovi.insert(66, "Adamas gender")
+rodovi.insert(67, "Exgender")
+rodovi.insert(68, "Affectugender")
+rodovi.insert(69, "Angenital")
+rodovi.insert(70, "Autogender")
+rodovi.insert(71, "Demifluid")
+rodovi.insert(72, "Caelgender")
+rodovi.insert(73, "Ambonec")
+rodovi.insert(74, "Genderpuck")
+
+# ------------------- EMAIL-------------------
+
+def provjera_email(unos):
+    if unos.get()!="ragebaited@gmail.com":
+        oznaci_netocno(unos)
+    else:
+        oznaci_tocno(unos)
+
+def rjesenje():
+    rjesenje=tk.Toplevel(glavni)
+    rjesenje.title("Hmm?")
+    rjesenje.geometry("500x200")
+
+    odgovor=tk.Label(rjesenje, text="Bi li se onda moglo reći da bi Vaša e-mail adresa mogla biti ragebaited@gmail.com ?")
+    odgovor.pack(pady=90)
+
+def mozda_prozor():
+    mozda__prozor=tk.Toplevel(glavni)
+    mozda__prozor.title("Neodlučnost?")
+    mozda__prozor.geometry("250x250")
+
+    odlucise=tk.Label(mozda__prozor, text="Molimo Vas da se odlučite.")
+    odlucise.pack(pady=90)
+
+    
+def izragean():
+    izragean=tk.Toplevel(glavni)
+    izragean.title("?")
+    izragean.geometry("600x300")
+
+    bilise=tk.Label(izragean, text="Bi li se moglo reći da Vas ovaj program čini ljutim?", font=("Arial",17))
+    bilise.pack(pady=65)
+
+    moglo=tk.Button(izragean, text="Da", command=rjesenje, bg="green", fg="white")
+    moglo.place(x=110, y=150)
+
+    mozda=tk.Button(izragean, text="Možda",command=mozda_prozor, bg="yellow", fg="black")
+    mozda.place(x=250, y=150)
+
+    nemoglo=tk.Button(izragean, text="Ne", bg="red", fg="white")
+    nemoglo.place(x=400, y=150)
+
+def jesam():
+    jesam=tk.Toplevel(glavni)
+    jesam.title(":D")
+    jesam.geometry("250x200")
+
+    hvala=tk.Label(jesam, text="Hvala!", font=("Arial",20))
+    hvala.pack(pady=25)
+
+    nastavi=tk.Button(jesam, text="NASTAVI", command=jesam.destroy and izragean, bg="green", fg="white")
+    nastavi.pack(pady=25)
+
+def tako():
+    tako=tk.Toplevel(glavni)
+    tako.title(":I")
+    tako.geometry("500x300")
+
+    potrudit=tk.Label(tako, text="Potrudit ćemo se biti bolji :D!", font=("Arial",20))
+    potrudit.pack(pady=75)
+
+    vrati=tk.Button(tako, text="VRATI", command=tako.destroy, bg="green", fg="white")
+    vrati.pack()
+
+def nope():
+    nope=tk.Toplevel(glavni)
+    nope.title(":(")
+    nope.geometry("300x300")
+
+    uredu=tk.Label(nope, text="Oprostite :(", font=("Arial",20))
+    uredu.pack(pady=75)
+
+    vrati=tk.Button(nope, text="VRATI", command=nope.destroy, bg="green", fg="white")
+    vrati.pack()
+
+def da():
+    da=tk.Toplevel(glavni)
+    da.title("POMOĆ!")
+    da.geometry("600x300")
+
+    prije=tk.Label(da, text="Prije svega, jeste li zadovoljni ovom pomoći? ", font=("Arial", 20))
+    prije.pack(pady=50)
+
+    sretan=tk.Button(da, text="Jesam!", command=jesam, bg="green", fg="white")
+    sretan.place(x=110, y=150)
+
+    takotako=tk.Button(da, text="Tako-tako", command=tako, bg="yellow", fg="black")
+    takotako.place(x=250, y=150)
+
+    nisam=tk.Button(da, text="Definitivno ne!", command=nope, bg="red", fg="white")
+    nisam.place(x=400, y=150)
+
+def pomoc_prozor():
+    pomocni_prozor=tk.Toplevel(glavni)
+    pomocni_prozor.title("Treba li Vam pomoć?")
+    pomocni_prozor.geometry("300x200")
+
+    jesili=tk.Label(pomocni_prozor, text="Treba li Vam stvarno pomoć?", font=("Arial", 12))
+    jesili.pack(pady=30)
+
+    ne=tk.Button(pomocni_prozor, text="Ne", command=pomocni_prozor.destroy, bg="red", fg="white")
+    ne.place(x=175, y=100)
+
+    da_pomoc=tk.Button(pomocni_prozor, text="Da", command=da, bg="green", fg="white")
+    da_pomoc.place(x=90, y=100)
+
+# ------------------- LOZINKA-------------------
+
+def provjera_lozinke():
+    lozinka=lozinka_unos.get()
+    if len(lozinka)!=67:
+        oznaci_netocno(lozinka_unos)
+    else:
+        oznaci_tocno(lozinka_unos)
+
+#------------------- SASTAVAK-------------------
+
+def provjera_sastavka(tekst_unos):
+    tekst=list(tekst_unos.get("1.0", tk.END).strip().split())
+    if len(tekst)>= 150:
+        oznaci_tocno(tekst_unos)
+    else:
+        oznaci_netocno(tekst_unos)
+    return len(tekst)>= 150
+
+# ------------------- CRTANJE -------------------
+
+def slikanje(pokret):
+    crtanje.create_oval(pokret.x, pokret.y, pokret.x+3, pokret.y+3)
+
+# ------------------- KARTICA-------------------
+
+def provjera_kartice():
+    broj_kartica=kartica_unos.get()
+    if len(broj_kartica)==16 and broj_kartica.isdigit():
+        oznaci_tocno(kartica_unos)
+    else:
+        oznaci_netocno(kartica_unos)
+
+# ------------------- ZAVRŠNA POTVRDA-------------------
+
+def provjera_sve():
+    return (
+        email_unos.get()=="ragebaited@gmail.com" and
+        len(lozinka_unos.get())==67 and
+        len(kartica_unos.get())==16 and
+        kartica_unos.get().isdigit() and
+        provjera_sastavka(tekst_unos))
+
+#------------------- IRITANTNO-------------------
+
+def iritantno():
+    global brojac_zavrsio
+    if brojac_zavrsio:
+        messagebox.showerror("Greška", "Vrijeme je isteklo! Podaci više nisu valjani.")
+        return
+    if not provjera_sve():
+        messagebox.showerror("Greška", "Nisu svi podaci ispravni!")
+        return
+    pobjeda=tk.Toplevel(glavni)
+    sirina, visina=300, 150
+    x=random.randint(0, glavni.winfo_screenwidth() - sirina)
+    y=random.randint(0, glavni.winfo_screenheight() - visina)
+    pobjeda.geometry(f"{sirina}x{visina}+{x}+{y}")
+    pobjeda.title("Jeste li sigurni?")
+    tk.Label(pobjeda, text="Jeste li sigurni?").pack(pady=10)
+    tk.Button(pobjeda, text="Siguran/na sam.", command=iritantno).pack()
+
+#------------------- SUČELJE-------------------
+
+naslov=tk.Label(glavni, text="Prijavni obrazac za posao u kompaniji Calm d.o.o.", font=("Arial", 20))
+naslov.pack(pady=10)
+moto=tk.Label(glavni, text="Kad ti život ne ponudi tipku za poslati dokument, zarotiraj ekran! - naš moto",font=("Arial",10))
+moto.pack(pady=10)
+crta=tk.Label(glavni, text="_____"*150, font=("Arial",10))
+crta.pack(pady=20)
+pozdrav=tk.Label(glavni, text="Molimo Vas da točnim informacijama ispunite ovaj obrazac kako bismo Vas bolje upoznali i zaposlili u našoj kompaniji.",font=("Arial",10))
+pozdrav.pack(pady=10)
+
+
+tk.Label(glavni, text="Ne brinite o ovome").pack()
+vrijeme_unos=tk.Entry(glavni)
+vrijeme_unos.pack(pady=5)
+
+
+tk.Label(glavni, text="Korisničko ime (min. 9 znakova)").pack()
+ime_unos=tk.Entry(glavni)
+ime_unos.pack(pady=5)
+tk.Button(glavni, text="Provjeri", command=provjera_imena).pack()
+
+
+tk.Label(glavni, text="Datum rođenja").pack(pady=10)
+datum_slider=tk.Scale(glavni, from_=0, to=raspon, orient="horizontal", command=update_datum, length=600, showvalue=0)
+datum_slider.pack()
+datum_tekst=tk.Label(glavni, text="")
+datum_tekst.pack()
+
+
+tk.Label(glavni, text="Rod").pack()
+rodovi_izbornik=tk.StringVar(glavni)
+tk.OptionMenu(glavni, rodovi_izbornik, *rodovi).pack()
+
+
+tk.Label(glavni, text="Email").pack()
+email_unos=tk.Entry(glavni)
+email_unos.pack()
+pomoc_gumb=tk.Button(glavni, text="Pomoć", command=pomoc_prozor)
+pomoc_gumb.pack(padx=10, pady=10)
+email_unos.bind("<FocusOut>", lambda e: provjera_email(email_unos))
+
+
+tk.Label(glavni, text="Password (točno šezdeset i sedam znakova)").pack()
+lozinka_unos=tk.Entry(glavni, show="*")
+lozinka_unos.pack()
+tk.Button(glavni, text="Provjeri", command=provjera_lozinke).pack()
+
+
+tk.Label(glavni, text="Sastavak o sebi (od viška glava ne boli)").pack()
+tekst_unos=tk.Text(glavni, height=6)
+tekst_unos.pack()
+tekst_unos.bind("<FocusOut>", lambda e: provjera_sastavka(tekst_unos))
+
+
+tk.Label(glavni, text="Nacrtaje se").pack()
+crtanje=tk.Canvas(glavni, width=200, height=300, bg="white")
+crtanje.pack()
+crtanje.bind("<B1-Motion>", slikanje)
+
+
+tk.Label(glavni, text="Broj kreditne kartice (bez razmaka (ne brinite ni o ovome))").pack()
+kartica_unos=tk.Entry(glavni)
+kartica_unos.pack()
+tk.Button(glavni, text="Provjeri", command=provjera_kartice).pack()
+
+
+tk.Button(glavni, text="Pošalji obrazac", command=iritantno).pack(pady=20)
+
+
+rage_gumb=tk.Button(glavni, text="Ragebaitan sam", command=ragebait_gumb)
+rage_gumb.pack(side="right", padx=10, pady=10)
+
+
+svi_unosi=[ime_unos, email_unos, lozinka_unos, kartica_unos]
+glavni.after(100, lambda: brojac(vrijeme_unos))
+
+
+glavni.mainloop()
